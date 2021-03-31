@@ -56,7 +56,17 @@ header {
   
 }
 
+.btn-initals{
 
+  border: none;
+  background-color: blue;
+  color: hsl(0, 0%, 100%);
+  display: block;
+  font-size: 22px;
+  margin: 16px 16px 16px 20px;
+  padding: 14px 34px;
+  border-radius: 15px;
+}
 .game-body {
   min-height: 100px;
   font-size: 28px;

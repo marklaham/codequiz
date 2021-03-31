@@ -1,3 +1,4 @@
+//array of obejcts of the questions and their answers adn options 
 var questions = [
   {
     question: "Commonly used data types DO NOT include:",
@@ -43,29 +44,20 @@ var score = 0;
 var storedScores = JSON.parse(localStorage.getItem("userInfo"));
 var input;
 var myform = document.createElement("form");
+var questionCount = 0;
+var timer;
+var timerCount;
 
-
-//var submitButton =document.createElement("button");
-console.log(storedScores);
+//console.log(storedScores);
+// takes the scores from local storage and ads them into the scorelist array
 if (storedScores !== null){
   for (var i = 0 ; i < storedScores.length; i++){
   scoreList.push(storedScores[i]);
   };
 }
 
-var questionCount = 0;
-var timer;
-var timerCount;
-
-// The init function is called when the page loads 
-//function init() {
-  //getWins();
-  //getlosses();
-//}
-
-// The startGame function is called when the start button is clicked
+// The startQuiz function is called when the start button is clicked
 function startQuiz() {
-  //isWin = false;
   timerCount = 75;
   // Prevents start button from being clicked when round is in progress
   currentQuestion =  questions[questionCount];
@@ -75,13 +67,6 @@ function startQuiz() {
   startTimer()
 }
 
-
-// The loseGame function is called when timer reaches 0
-function loseGame() {
-  //wordBlank.textContent = "GAME OVER";
-  //startButton.disabled = false;
-  //setLosses()
-}
 
 // The setTimer function starts and stops the timer and triggers winGame() and loseGame()
 function startTimer() {
@@ -106,7 +91,7 @@ function startTimer() {
 }
 
 
-
+//displays question q  on main page
 function askQuestion(q){
 
     mainQuestionArea.innerHTML = "" ;
@@ -123,6 +108,7 @@ function askQuestion(q){
 
 };
 
+//loads the next question and calls asQuestion() again to load it 
 function displaynextQuestion(event){
   questionCount++
   if(questionCount < questions.length){
@@ -141,24 +127,23 @@ function displaynextQuestion(event){
   }else{
       console.log("endgame");
       displayScore();
-     
-
   }
   
-   
 }
 
+// called after quiz is done to display their score and ask their initials
 function displayScore(){
   clearInterval(timer);
   mainQuestionArea.innerHTML = "You score is: " +  score;
 
+  //creating the form that will pass back initials 
   var myform = document.createElement("form");
   myform.method = "get";
-
+  myform.className = "inputForm";
   var label = document.createElement("label");
-  label.value = "enter your initials";
+  label.innerText = "Enter your initials             ";
   myform.appendChild(label);
-
+//input field 
   input = document.createElement("input");
   input.value = "";
   input.name = "name";
@@ -167,21 +152,22 @@ function displayScore(){
   userInitials = input.value;
   console.log(userInitials);
   myform.appendChild(input);
-
+//save button
   var submitButton =document.createElement("button");
   submitButton.className="btn-initals";
   submitButton.innerText= "Save";
   myform.appendChild(submitButton);
   mainQuestionArea.appendChild(myform);
  
-
+//event lister for input field 
   input.addEventListener("input", myScript);
-
+  //captures the name and stores it
   function myScript(e){
     console.log(e)
-    userInitials =userInitials +  e.data ;
+    userInitials = userInitials +  e.data ;
 
   };
+
 
  submitButton.addEventListener("click", displayScores);
 
@@ -189,14 +175,12 @@ function displayScore(){
 
 //submitButton.addEventListener("click", displayScores, true);
 
-
+//displays stored scores function 
 function displayScores(event){
 
   event.preventDefault();
   console.log(input);
   console.log(myform.input);
-  // get data from it and assign it to userinitals
-  //userInitials = input.value
   var userInfo = {
     inits: userInitials,
     userScore: score
@@ -206,7 +190,7 @@ function displayScores(event){
   scoreList.push(userInfo);
   localStorage.setItem("userInfo", JSON.stringify(scoreList));
 
-
+  //run through the stored scores create a list element with them 
   if (storedScores !== null) {
     var list = document.createElement("ol");
     list.className = "scoreListClass";
@@ -225,24 +209,29 @@ function displayScores(event){
     list.appendChild(scoreEntry);
 
   }
-
+    //append the list to the page 
     mainQuestionArea.appendChild(list);
 
+
+    //creation of go back button 
     var goBackButton =document.createElement("button")
     goBackButton.className="btn-primary"
     goBackButton.innerText= "Go Back"
 
+    //creation of clear scores button 
     var clearButton =document.createElement("button")
     clearButton.className="btn-primary"
     clearButton.innerText= "Clear Scores"
 
+    // appending both those buttons to the page 
     mainQuestionArea.appendChild(goBackButton);
     mainQuestionArea.appendChild(clearButton);
 
+    //event listeners for the previos 2 buttons 
     goBackButton.addEventListener("click", goToStart);
     clearButton.addEventListener("click", clearScores);
   
-
+     //clears the scores and erases the list of scores from screen 
     function clearScores(e){
 
       localStorage.clear();
@@ -258,13 +247,17 @@ function displayScores(event){
 
 }
 
+//takes user back to first page by reloading 
 function goToStart(){
 
   location.reload();
   return;
 }
 
-
+//Checks to see if answer chosen is correct 
+//if it is it prints good at the bottom of screen  
+//if wrong displays wrong and takes 10 seconds off the clock
+/
 function isRightAnswer(response){
     
   if(response){
@@ -289,24 +282,7 @@ function isRightAnswer(response){
 
 }
 
-
-
-// Attach event listener to start button to call startGame function on click
+// Attach event listener to start button to call startQuiz function on click
 startButton.addEventListener("click", startQuiz);
 
-// Calls init() so that it fires when page opened
-//init();
 
-// Bonus: Add reset button
-//var resetButton = document.querySelector(".reset-button");
-
-//function resetGame() {
- //  Resets win and loss counts
- // winCounter = 0;
-  //loseCounter = 0;
-  // Renders win and loss counts and sets them into client storage
- // setWins()
-  //setLosses()
-//}
-// Attaches event listener to button
-//resetButton.addEventListener("click", resetGame);
