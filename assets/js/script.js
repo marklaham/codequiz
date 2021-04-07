@@ -238,7 +238,9 @@ function displayScores(event){
       list.innerHTML = "";
       list.clear
       scoreList.clear;
-      storedScores.clear;
+      if (storedScores !== null){
+        storedScores.clear;
+      }
      // displayScores(e);
       return;
     }
@@ -257,7 +259,7 @@ function goToStart(){
 //Checks to see if answer chosen is correct 
 //if it is it prints good at the bottom of screen  
 //if wrong displays wrong and takes 10 seconds off the clock
-/
+
 function isRightAnswer(response){
     
   if(response){
